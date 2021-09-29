@@ -17,7 +17,20 @@ list = [{"sensorId": "101", "temperature": "12", "time": "YYYY-MM-DD HH:MM:SS"},
 @app.route('/api/temperature', methods=['PUT'])
 def insternewtemp():
     new_temp = request.json
-    list.append(new_temp)
+    response = dbclient.put_item(
+    TableName='TelemetryApp',
+    Item={
+        'time': {
+            'S': new_temp['time']},
+        
+        'sensorID':
+           { 'S': new_temp['sensorID']},
+
+        'temperature':
+            {'S': new_temp['temperature']}
+
+            }
+        )
     return 'Ok'
 
 #{"Maximum": 30, "Minimum": 10, "Average": 15}
@@ -26,5 +39,5 @@ def stats():
     all_temps = []
     for object in list:
         all_temps.append(int(object['temperature']))
-    return {"Maximum": int(max(all_temps)), "Minimum": int(min(all_temps)),"Average": int(sum(all_temps)/len(all_temps))}    
+    return {"Maximum": int(max(all_temps)), "Minimum": int(min(all_temps)),"Average": sum(all_temps)/len(all_temps)}    
 
