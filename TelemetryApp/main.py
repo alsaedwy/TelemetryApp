@@ -1,24 +1,34 @@
 import json
 import boto3
-from flask import Flask, jsonify, request
+import os
+from flask import Flask, request
+from flask.wrappers import Response
 app = Flask(__name__)
 
+# Set table name from environment variables, the table name is a variable because it gets created in the provisioning stage, so that the code doesn't create it each time it runs.
+try:
+    table_name = os.environ['TABLE_NAME']
+except:
+    print('Please set the environment variable "TABLE_NAME" to be the, you know, table name')
+
 dbclient = boto3.client('dynamodb') 
+dynamodb = boto3.resource('dynamodb')
+table = dynamodb.Table(table_name)
+
 
 #Sample GET response with 'Hello!' for testing basic functions
 @app.route('/api')
 def index():
-    return jsonify({'message': 'Hello!'})
+    return {'message': 'Hello!'}
 
 # Function to PUT through /api/temperature, payload format:
-# {"sensorId": "101", "temperature": "12", "time": "YYYY-MM-DD HH:MM:SS"}
-list = [{"sensorId": "101", "temperature": "12", "time": "YYYY-MM-DD HH:MM:SS"}, {"sensorId": "102", "temperature": "14", "time": "YYYY-MM-DD HH:MM:SS"}]
+# {"sensorID": "107","temperature": "200","time": "2012-MM-DD HH:MM:SS"}
 
 @app.route('/api/temperature', methods=['PUT'])
 def insternewtemp():
     new_temp = request.json
     response = dbclient.put_item(
-    TableName='TelemetryApp',
+    TableName=table_name,
     Item={
         'time': {
             'S': new_temp['time']},
@@ -33,11 +43,14 @@ def insternewtemp():
         )
     return 'Ok'
 
-#{"Maximum": 30, "Minimum": 10, "Average": 15}
+
+# Function to return the Maximum, Minimum and Average based on collecting all the temperatures from all the table's items using table.scan()
+#Return sample: {"Maximum": 30, "Minimum": 10, "Average": 15}
 @app.route('/api/stats')
 def stats():
     all_temps = []
-    for object in list:
+    response = table.scan()
+    for object in response['Items']:
         all_temps.append(int(object['temperature']))
-    return {"Maximum": int(max(all_temps)), "Minimum": int(min(all_temps)),"Average": sum(all_temps)/len(all_temps)}    
+    return {"Maximum": int(max(all_temps)), "Minimum": int(min(all_temps)),"Average": round(sum(all_temps)/len(all_temps))}    
 
