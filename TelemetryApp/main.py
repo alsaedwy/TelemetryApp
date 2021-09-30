@@ -5,6 +5,10 @@ from flask import Flask, request
 from flask.wrappers import Response
 app = Flask(__name__)
 
+# Set allowance to serve from all IP addresses and ports
+if __name__ == '__main__':
+	app.run(host='0.0.0.0', port=80)
+
 # Set table name from environment variables, the table name is a variable because it gets created in the provisioning stage, so that the code doesn't create it each time it runs.
 try:
     table_name = os.environ['TABLE_NAME']
