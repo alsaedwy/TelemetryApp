@@ -1,6 +1,6 @@
 # Steps:
 
-0- To Self: Don't forget the environment variables: (export FLASK_APP=main.py - export FLASK_ENV=development )
+## Code 
 
 1- Create the APIs locally using dictionaries, and create the logic to return max, min and average temperatures. - Done.
 
@@ -11,5 +11,8 @@
 4- Make 'Table Name' a variable, so that the code can dynamically work with any table. - Done.
 
 5- Containerise the application. - Done.
+-----------------------------------------
+## Infrastructure and Deployment
 
-6- 
+6- Create an AWS pipeline to build and deploy the application after each push.
+
