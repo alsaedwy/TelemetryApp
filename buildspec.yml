@@ -4,16 +4,16 @@ phases:
   pre_build:
     commands:
       - echo Logging in to Amazon ECR.
-      - aws ecr get-login-password --region 553449525156 | docker login --username AWS --password-stdin ${CODEBUILD_WEBHOOK_ACTOR_ACCOUNT_ID}.dkr.ecr.553449525156.amazonaws.com
+      - aws ecr get-login-password --region ${AWS_REGION} | docker login --username AWS --password-stdin 553449525156.dkr.ecr.${AWS_REGION}.amazonaws.com
   build:
     commands:
       - echo Build started on `date`
       - echo Building the Docker image...          
       - docker build -t telemetry1 .
-      - docker tag telemetry1:latest ${CODEBUILD_WEBHOOK_ACTOR_ACCOUNT_ID}.dkr.ecr.553449525156.amazonaws.com/telemetry1:latest
+      - docker tag telemetry1:latest 553449525156.dkr.ecr.${AWS_REGION}.amazonaws.com/telemetry1:latest
       - echo Build was successful!      
   post_build:
     commands:
       - echo Build completed on `date`
       - echo Pushing the Docker image...
-      - docker push ${CODEBUILD_WEBHOOK_ACTOR_ACCOUNT_ID}.dkr.ecr.553449525156.amazonaws.com/telemetry1:latest
+      - docker push 553449525156.dkr.ecr.${AWS_REGION}.amazonaws.com/telemetry1:latest
