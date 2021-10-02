@@ -1,2 +1,3 @@
 .venv/
 TelemetryApp/__pycache__/
+Terraform/.terraform*
