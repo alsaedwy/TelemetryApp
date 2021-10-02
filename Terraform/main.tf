@@ -119,7 +119,8 @@ resource "aws_iam_role_policy" "CodeBuild-Telemetry-Policy" {
 				"ecr:GetAuthorizationToken",
 				"ecr:InitiateLayerUpload",
 				"ecr:PutImage",
-				"ecr:UploadLayerPart"
+				"ecr:UploadLayerPart",
+        "s3:*"
 			],
 			"Resource": "*"
 		}
@@ -250,7 +251,7 @@ resource "aws_s3_bucket" "codepipeline_bucket-telemetry" {
 
 resource "aws_iam_role" "codepipeline-telemetryapp-role" {
   name = "test-role"
-
+  managed_policy_arns = ["arn:aws:iam::aws:policy/AWSCodePipelineFullAccess","arn:aws:iam::aws:policy/AWSCodeCommitPowerUser"]
   assume_role_policy = <<POLICY
 {
   "Version": "2012-10-17",
@@ -334,7 +335,7 @@ resource "aws_ecs_task_definition" "TaskDefinition-Telemetry" {
   memory = 512
   container_definitions = jsonencode([
     {
-      name      = "first"
+      name      = "TelemetryApp"
       image     = "${aws_ecr_repository.TelemetryAppECRRepo.repository_url}:latest"
       cpu       = 256
       memory    = 512
@@ -397,13 +398,14 @@ resource "aws_ecs_service" "TelemetryECSService" {
   name    = "TelemetryECSService"
   cluster = aws_ecs_cluster.Telemetry_Cluster.id
   launch_type = "FARGATE"
+  desired_count = 2
   # deployment_controller {
   #   type = "CODE_DEPLOY"
   # }
   task_definition = aws_ecs_task_definition.TaskDefinition-Telemetry.arn
   network_configuration {
     subnets = [module.vpc.public_subnets[0],module.vpc.public_subnets[0],module.vpc.public_subnets[0]]
-    security_groups = module.vpc.default_security_group_id
+    security_groups = [module.vpc.default_security_group_id]
     assign_public_ip = "true"
 
   }

@@ -17,3 +17,9 @@ phases:
       - echo Build completed on `date`
       - echo Pushing the Docker image...
       - docker push ${ECRREPO}:latest
+      - printf '[{"name":"TelemetryApp","imageUri":"${ECRREPO}:latest"}]' > imagedefinitions.json
+artifacts:
+  files:
+    - imagedefinitions.json
+
+  
