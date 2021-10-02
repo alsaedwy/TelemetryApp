@@ -4,8 +4,6 @@ phases:
   pre_build:
     commands:
       - echo Logging in to Amazon ECR.
-      - export ACC_ID=`curl http://169.254.169.254/latest/dynamic/instance-identity/document|grep accountId| awk '{print $3}'|sed  's/"//g'|sed 's/,//g'`
-      - echo $ACC_ID
       - aws ecr get-login-password --region ${AWS_REGION} | docker login --username AWS --password-stdin 553449525156.dkr.ecr.${AWS_REGION}.amazonaws.com
   build:
     commands:
