@@ -2,7 +2,7 @@ FROM python:3-alpine
 
 COPY . .
 
-WORKDIR ./TelemetryApp
+#WORKDIR ./TelemetryApp
 
 RUN pip3 install -r requirements.txt
 
