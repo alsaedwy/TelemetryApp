@@ -48,9 +48,7 @@ resource "aws_ecs_service" "TelemetryECSService" {
   cluster = aws_ecs_cluster.Telemetry_Cluster.id
   launch_type = "FARGATE"
   desired_count = 2
-  # deployment_controller {
-  #   type = "CODE_DEPLOY"
-  # }
+
   task_definition = aws_ecs_task_definition.TaskDefinition-Telemetry.arn
   network_configuration {
     subnets = [module.vpc.public_subnets[0],module.vpc.public_subnets[0],module.vpc.public_subnets[0]]
