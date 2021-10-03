@@ -25,6 +25,25 @@
 - [rolesandpermissions.tf](Terraform/rolesandpermissions.tf) - Contains all of the roles associated with the provisioned resources.
 - [codepipeline.tf](Terraform/codepipeline.tf) - Creates a pipeline that pulls the code after being triggered from CodeCommit, builds the container using CodeBuild, pushes the image to an ECR repository, then deploys the ECR image to an ECS service. Below are the main stages:
   - [repos.tf](Terraform/repos.tf) - Creates a CodeCommit -empty- repository, and an ECR repository, the CodeCommit repository is used for the `Source` stage in the pipeline
-  - [codebuild.tf](Terraform/codebuild.tf) - Creates a CodeBuild project, used with `Build` stage.
+  - [codebuild.tf](Terraform/codebuild.tf) - Creates a CodeBuild project, used with `Build` stage. [buildspec.yml](Terraform/buildspec.yml) is included in the same directory as well as it is read from the Terraform file for CodeBuild.
   - [ecs.tf](Terraform/ecs.tf) - Creates an ECS cluster, a task definition, and an ECS service, used with `Deploy` stage.
 - [vpc.tf](Terraform/vpc.tf) - Creates a VPC with `10.0.0.0/16` CIDR, 3 public subnets `10.0.101.0/24`, `10.0.102.0/24`, and `10.0.103.0/24`. It also creates an Internet Gateway, and a security group with inbound rules for ports `80` and `22` from any address.
+- [dynamodb.tf](Terraform/dynamodb.tf] - Creates a DynamoDB table with a primary key `time`. 
+- [loadbalancer.tf](Terraform/dynamodb.tf) - Creates an Application Loadbalancer, with a target group for the ECS tasks.
+- [outputs.tf](Terraform/outputs.tf) - Outputs 3 main URLs: CodeCommit Repository, and an endpoint URL for the ALB. This URL can be used for communicating with the application after the first deployment (explained below), after adding requested paths (`/api/temperature` and `/api/stats`).
+
+## First deployment:
+
+### Prerequisits: 
+- An AWS user with sufficient permissions to create all of the above resources and roles.
+- A shell terminal with configured access keys.
+
+### Steps for deployment:
+
+1. Clone the repository using `git clone https://github.com/alsaedwy/TelemetryApp`, then change into the Terraform directory using `cd TelemetryApp/Terraform`.
+2. Initiate Terraform to download the provider files `terraform init`.
+3. Apply the Terraform code with `terraform apply`. 
+4. Terraform will output 2 URLs after a successful deployment. Please take copy these URLs for usage within next steps.
+5. *IMPORTANT STEP* - Since the CodeCommit repository is empty, you will need to push the code (from your terminal). Create a CodeCommit user credentials for a user with [sufficient permissions](https://docs.aws.amazon.com/codecommit/latest/userguide/auth-and-access-control-permissions-reference.html#aa-git) to push code to the newly created and empty repository. The pushed code _*has to be*_ a clone from this repository. For a detailed steps regarding this step, please have a look [here](https://docs.aws.amazon.com/codecommit/latest/userguide/how-to-migrate-repository-existing.html). 
+6. After the first push, a deployment will be triggered on the pipeline, and after a success in the 3 stages, you should be able to reach the endpoint with `/api`, `/api/temperature` using PUT method, and `/api/stats` using GET method. 
+
