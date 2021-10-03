@@ -34,7 +34,13 @@ resource "aws_codebuild_project" "Telemetry-CB-Project" {
   source {
     type            = "CODEPIPELINE"
     git_clone_depth = 0
-    buildspec = templatefile("buildspec.yml", {ECRREPO = aws_ecr_repository.TelemetryAppECRRepo.repository_url} )
+    buildspec = templatefile(
+    "buildspec.yml",
+    {ECRREPO = aws_ecr_repository.TelemetryAppECRRepo.repository_url, 
+     REGION = provider.aws.region,
+     TABLE_NAME = aws_dynamodb_table.Telemetry-dynamodb-table.name,
+     FLASK_ENV = var.FLASK_ENV
+    } )
 
   }
 

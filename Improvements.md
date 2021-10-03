@@ -7,3 +7,4 @@
 4- Blue/Green using CodeDeploy.
 5- Confine permissions on all of the roles.
 6- Add service autoscaling.
+7- Pass all variables needed from Terraform, not just the table's name.
