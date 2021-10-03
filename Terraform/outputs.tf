@@ -1,4 +1,4 @@
-output "OutPutECR" {
+output "ECR-REPO" {
   value = aws_ecr_repository.TelemetryAppECRRepo.repository_url
 }
 

@@ -8,5 +8,4 @@
 5- Confine permissions on all of the roles.
 6- Add service autoscaling.
 7- Separate application's source code and infrastructure repositories
-
-8- Pass all variables needed from Terraform, not just the table's name.
+8- Use a web server for production loads, like Nginx. 
