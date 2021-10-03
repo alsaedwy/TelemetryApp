@@ -1,2 +1,8 @@
 # TelemetryApp
-Telemetry Challenge code with different deployment options using Terraform IaC
+
+## This repository consists of three main parts:
+
+  - [Documentation](Documentation)
+   - [References](Documentation/References.md)
+   - [Steps](Documentation/Steps)
+   - [Improvements](Documentation/Improvements.md)
