@@ -37,7 +37,7 @@ resource "aws_codebuild_project" "Telemetry-CB-Project" {
     buildspec = templatefile(
     "buildspec.yml",
     {ECRREPO = aws_ecr_repository.TelemetryAppECRRepo.repository_url, 
-     REGION = provider.aws.region,
+     REGION = var.region,
      TABLE_NAME = aws_dynamodb_table.Telemetry-dynamodb-table.name,
      FLASK_ENV = var.FLASK_ENV
     } )
