@@ -6,6 +6,7 @@ WORKDIR ./TelemetryApp
 
 RUN pip3 install -r requirements.txt
 
+# Can be overriden from buildspec.yml with --build-args flag. 
 ARG TABLE_NAME=TemperatureData
 ARG AWS_DEFAULT_REGION=eu-west-1
 ARG FLASK_ENV=development

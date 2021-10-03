@@ -9,7 +9,7 @@ phases:
     commands:
       - echo Build started on `date`
       - echo Building the Docker image...          
-      - docker build -t telemetry1 --build-arg $AWS_DEFAULT_REGION=${REGION} --build-arg $TABLE_NAME=${TABLE_NAME} --build-arg $FLASK_ENV=${FLASK_ENV} . 
+      - docker build -t telemetry1 --build-arg AWS_DEFAULT_REGION=${REGION} --build-arg TABLE_NAME=${TABLE_NAME} --build-arg FLASK_ENV=${FLASK_ENV} . 
       - docker tag telemetry1:latest ${ECRREPO}:latest
       - echo Build was successful!      
   post_build:
