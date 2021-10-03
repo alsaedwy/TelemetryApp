@@ -1,11 +1,11 @@
-output "OutPutECR" {
+output "ECR-Repo-URL" {
   value = aws_ecr_repository.TelemetryAppECRRepo.repository_url
 }
 
 
-output "CodeCommit" {
+output "CodeCommit-RepositoryURL" {
   value = aws_codecommit_repository.TelemetryApp-CC-Repo.clone_url_http
 }
-output "ALB-URL" {
+output "ALB-URL-ENDPOINT" {
   value = aws_lb.Telemetry-ALB-For-ECS-Service.dns_name
 }
