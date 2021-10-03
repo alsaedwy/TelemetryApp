@@ -247,11 +247,12 @@ resource "aws_codepipeline" "codepipeline-telemetryapp" {
 resource "aws_s3_bucket" "codepipeline_bucket-telemetry" {
   bucket = "telemetry-bucket-alaa"
   acl    = "private"
+  force_destroy = "true"
 }
 
 resource "aws_iam_role" "codepipeline-telemetryapp-role" {
-  name = "test-role"
-  managed_policy_arns = ["arn:aws:iam::aws:policy/AWSCodePipelineFullAccess","arn:aws:iam::aws:policy/AWSCodeCommitPowerUser"]
+  name = "codepipeline-telemetryapp-role"
+  managed_policy_arns = ["arn:aws:iam::aws:policy/AWSCodePipelineFullAccess","arn:aws:iam::aws:policy/AWSCodeCommitPowerUser","arn:aws:iam::aws:policy/AWSCodeDeployRoleForECS"]
   assume_role_policy = <<POLICY
 {
   "Version": "2012-10-17",
@@ -296,7 +297,8 @@ resource "aws_iam_role_policy" "codepipeline_policy" {
       "Effect": "Allow",
       "Action": [
         "codebuild:BatchGetBuilds",
-        "codebuild:StartBuild"
+        "codebuild:StartBuild",
+        "codecommit:*"
       ],
       "Resource": "*"
     }
@@ -409,6 +411,11 @@ resource "aws_ecs_service" "TelemetryECSService" {
     assign_public_ip = "true"
 
   }
+    load_balancer {
+    target_group_arn = aws_alb_target_group.TG-For-ECS-Service.arn
+    container_name   = "TelemetryApp"
+    container_port   = 80
+  }
 }
 
 
@@ -420,4 +427,48 @@ output "OutPutECR" {
 output "CodeCommit" {
   value = aws_codecommit_repository.TelemetryApp-CC-Repo.clone_url_http
 }
+output "ALB-URL" {
+  value = aws_lb.Telemetry-ALB-For-ECS-Service.dns_name
+}
 
+#####################
+resource "aws_lb" "Telemetry-ALB-For-ECS-Service" {
+  name               = "Telemetry-ALB-For-ECS-Service"
+  internal           = false
+  load_balancer_type = "application"
+  security_groups    = [module.vpc.default_security_group_id]
+  subnets            = module.vpc.public_subnets.*
+ 
+  enable_deletion_protection = false
+}
+ 
+resource "aws_alb_target_group" "TG-For-ECS-Service" {
+  name        = "Telemetry-ALB-For-ECS-Service"
+  port        = 80
+  protocol    = "HTTP"
+  vpc_id      = module.vpc.vpc_id
+  target_type = "ip"
+ 
+  health_check {
+   healthy_threshold   = "3"
+   interval            = "30"
+   protocol            = "HTTP"
+   matcher             = "200"
+   timeout             = "3"
+   path                = "/api"
+   unhealthy_threshold = "5"
+  }
+}
+
+resource "aws_alb_listener" "http" {
+  load_balancer_arn = aws_lb.Telemetry-ALB-For-ECS-Service.id
+  port              = 80
+  protocol          = "HTTP"
+ 
+  default_action {
+   type = "forward"
+ 
+   target_group_arn = aws_alb_target_group.TG-For-ECS-Service.arn
+  }
+}
+ 
