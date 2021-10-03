@@ -44,6 +44,26 @@
 2. Initiate Terraform to download the provider files `terraform init`.
 3. Apply the Terraform code with `terraform apply`. 
 4. Terraform will output 2 URLs after a successful deployment. Please take copy these URLs for usage within next steps.
-5. *IMPORTANT STEP* - Since the CodeCommit repository is empty, you will need to push the code (from your terminal). Create a CodeCommit user credentials for a user with [sufficient permissions](https://docs.aws.amazon.com/codecommit/latest/userguide/auth-and-access-control-permissions-reference.html#aa-git) to push code to the newly created and empty repository. The pushed code _*has to be*_ a clone from this repository. For a detailed steps regarding this step, please have a look [here](https://docs.aws.amazon.com/codecommit/latest/userguide/how-to-migrate-repository-existing.html). 
+5. *IMPORTANT STEP* - Since the CodeCommit repository is empty, you will need to push the code (from your terminal). Create a CodeCommit user credentials for a user with [sufficient permissions](https://docs.aws.amazon.com/codecommit/latest/userguide/auth-and-access-control-permissions-reference.html#aa-git) to push code to the newly created and empty repository. The pushed code _*has to be*_ a clone from this repository. You will need to use the username and password to push the code for the CodeCommit repository in your account. For a detailed steps regarding this step, please have a look [here](https://docs.aws.amazon.com/codecommit/latest/userguide/how-to-migrate-repository-existing.html). 
 6. After the first push, a deployment will be triggered on the pipeline, and after a success in the 3 stages, you should be able to reach the endpoint with `/api`, `/api/temperature` using PUT method, and `/api/stats` using GET method. 
 
+----------------------------
+## Usage:
+- Using `PUT` method with _`endpoint-URL`_`/api/temperature`, a payload can be a JSON like the following:
+```
+    {
+     "sensorID": "107",
+     "temperature": "12",
+     "time": "2021-10-04 09:00:00"
+    }
+```
+A sucessful response will be `Ok` with response code `200`.
+
+- Using `GET` method with  _`endpoint-URL`_`/api/temperature`, a sucessful response will be similar to the following:
+```
+    {
+     "Average": 12,
+     "Maximum": 12,
+     "Minimum": 12
+    }
+```
