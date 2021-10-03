@@ -46,7 +46,34 @@
 4. Terraform will output 2 URLs after a successful deployment. Please take copy these URLs for usage within next steps.
 5. *IMPORTANT STEP* - Since the CodeCommit repository is empty, you will need to push the code (from your terminal).
     1. Create a CodeCommit user credentials for a user with [sufficient permissions](https://docs.aws.amazon.com/codecommit/latest/userguide/auth-and-access-control-permissions-reference.html#aa-git) to push code to the newly created and empty repository. 
-    2. The pushed code _*has to be*_ a clone from this repository. 
+    2. The pushed code _*has to be*_ a clone from this repository. So a `tree` command will look like this locally when pushing the repository. This is important and it will affect how the pipeline works in further steps (because of the file references).
+
+            ├── Documentation
+            │   ├── Improvements.md
+            │   ├── References.md
+            │   └── Steps.md
+            ├── LICENSE
+            ├── README.md
+            ├── TelemetryApp
+            │   ├── Dockerfile
+            │   ├── main.py
+            │   └── requirements.txt
+            └── Terraform
+                ├── buildspec.yml
+                ├── codebuild.tf
+                ├── codepipeline.tf
+                ├── dynamodb.tf
+                ├── ecs.tf
+                ├── loadbalancer.tf
+                ├── main.tf
+                ├── outputs.tf
+                ├── repos.tf
+                ├── rolesandpermissions.tf
+                ├── terraform.tfstate
+                ├── terraform.tfstate.backup
+                ├── vars.tf
+                └── vpc.tf
+
     3. You will need to use the username and password to push the code for the CodeCommit repository in your account. 
     4. For a detailed steps regarding this step, please have a look [here](https://docs.aws.amazon.com/codecommit/latest/userguide/how-to-migrate-repository-existing.html). 
 6. After the first push, a deployment will be triggered on the pipeline, and after a success in the 3 stages, you should be able to reach the endpoint with `/api`, `/api/temperature` using PUT method, and `/api/stats` using GET method. 
