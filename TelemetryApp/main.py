@@ -56,5 +56,10 @@ def stats():
     response = table.scan()
     for object in response['Items']:
         all_temps.append(int(object['temperature']))
+        
+    try:
+        maximum = max(all_temps)
+    except:
+        return 'No data inserted yet!'
     return {"Maximum": int(max(all_temps)), "Minimum": int(min(all_temps)),"Average": round(sum(all_temps)/len(all_temps))}    
 
