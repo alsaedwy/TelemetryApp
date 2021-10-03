@@ -14,10 +14,14 @@
 -----------------------------------------
 ## Infrastructure and Deployment
 
-6- Create a high level diagram (use draw.io).
+6- Create a high level diagram (use draw.io). 
 
-7- Create CodeBuild Project using Terraform
-
-- Create an AWS pipeline to build and deploy the application after each push.
+7- Create CodeBuild Project using Terraform. - Done.
 -- CodeBuild permissions (create policy) for ECR 
 -- Make sure it is priviliged mode
+
+8- Create an AWS pipeline to build and deploy the application after each push. - Done.
+
+9- Create required repositories, ECS cluster and a VPC. - Done.
+
+10- Write documentation for the project.
