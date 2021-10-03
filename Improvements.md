@@ -4,3 +4,6 @@
 1- Save time if not passed.
 2- New function to check if calculating stats needed each time a new temperature is added (helper function).
 3- Authenticate & authorize devices that are sending temperature data
+4- Blue/Green using CodeDeploy.
+5- Confine permissions on all of the roles.
+6- Add service autoscaling.
