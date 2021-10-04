@@ -32,6 +32,9 @@
 - [loadbalancer.tf](Terraform/dynamodb.tf) - Creates an Application Loadbalancer, with a target group for the ECS tasks.
 - [outputs.tf](Terraform/outputs.tf) - Outputs 3 main URLs: CodeCommit Repository, and an endpoint URL for the ALB. This URL can be used for communicating with the application after the first deployment (explained below), after adding requested paths (`/api/temperature` and `/api/stats`).
 
+![Telemetry App Challenge](https://user-images.githubusercontent.com/14993988/135810782-df75f97d-5d76-47e7-a075-06bce8bf2bf2.jpg)
+
+
 ## First deployment:
 
 ### Prerequisits: 
