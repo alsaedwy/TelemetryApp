@@ -50,10 +50,12 @@ def insternewtemp():
 
 # Function to return the Maximum, Minimum and Average based on collecting all the temperatures from all the table's items using table.scan()
 #Return sample: {"Maximum": 30, "Minimum": 10, "Average": 15}
+# TODO: New function with data validation for every key and value inserted. 
 @app.route('/api/stats')
 def stats():
     all_temps = []
     response = table.scan()
+    
     for object in response['Items']:
         all_temps.append(int(object['temperature']))
         
