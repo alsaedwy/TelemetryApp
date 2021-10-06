@@ -51,7 +51,7 @@ resource "aws_ecs_service" "TelemetryECSService" {
 
   task_definition = aws_ecs_task_definition.TaskDefinition-Telemetry.arn
   network_configuration {
-    subnets = [module.vpc.public_subnets[0],module.vpc.public_subnets[0],module.vpc.public_subnets[0]]
+    subnets = [module.vpc.public_subnets[0],module.vpc.public_subnets[1],module.vpc.public_subnets[2]]
     security_groups = [module.vpc.default_security_group_id]
     assign_public_ip = "true"
 
