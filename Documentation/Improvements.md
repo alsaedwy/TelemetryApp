@@ -10,3 +10,4 @@
 7- Separate application's source code and infrastructure repositories
 8- Use a web server for production loads, like Nginx. 
 9- Convert public subnets to private, as there is no need for the tasks to have public IPs.
+10- Add data validation (try/except)
